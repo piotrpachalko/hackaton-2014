@@ -1,64 +1,153 @@
 package com.mpmp.freya.mobile;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.AbsListView;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
-public class MainActivity extends ActionBarActivity {
+import com.nhaarman.listviewanimations.itemmanipulation.ExpandableListItemAdapter;
+import com.nhaarman.listviewanimations.itemmanipulation.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeDismissAdapter;
+import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
+
+public class MainActivity extends AbstractActivity implements OnDismissCallback {
+
+
+    private FreyaExpandableListItemAdapter mExpandableListItemAdapter;
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mExpandableListItemAdapter = new FreyaExpandableListItemAdapter(this, getItems());
+
+        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(new SwipeDismissAdapter(mExpandableListItemAdapter, this));
+		swingBottomInAnimationAdapter.setInitialDelayMillis(300);
+		swingBottomInAnimationAdapter.setAbsListView(getListView());
+
+		getListView().setAdapter(swingBottomInAnimationAdapter);
+
+    }
+
+    private static class FreyaExpandableListItemAdapter extends ExpandableListItemAdapter<Integer> {
+
+        private final Context mContext;
+        private final LruCache<Integer, Bitmap> mMemoryCache;
+
+        /**
+         * Creates a new ExpandableListItemAdapter with the specified list, or an empty list if
+         * items == null.
+         */
+        private FreyaExpandableListItemAdapter(final Context context, final List<Integer> items) {
+            super(context, R.layout.activity_expandlistitem_card, R.id.activity_expandlistitem_card_title, R.id.activity_expandlistitem_card_content, items);
+            mContext = context;
+
+            final int cacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
+            mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize) {
+                @Override
+                protected int sizeOf(final Integer key, final Bitmap bitmap) {
+                    // The cache size will be measured in kilobytes rather than
+                    // number of items.
+                    return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
+                }
+            };
+        }
+
+        @Override
+        public View getTitleView(final int position, final View convertView, final ViewGroup parent) {
+            ViewHolder viewHolder;
+			View view = convertView;
+			if (view == null) {
+				view = LayoutInflater.from(mContext).inflate(R.layout.activity_expandlist_label, parent, false);
+
+				viewHolder = new ViewHolder();
+				viewHolder.textView = (TextView) view.findViewById(R.id.activity_expandlist_label_textview);
+				view.setTag(viewHolder);
+
+				viewHolder.imageView = (ToggleButton) view.findViewById(R.id.activity_expandlist_label_togglebutton);
+			} else {
+				viewHolder = (ViewHolder) view.getTag();
+			}
+
+			viewHolder.textView.setText(mContext.getString(R.string.expandorcollapsecard, getItem(position)));
+
+			return view;
+        }
+
+        @Override
+        public View getContentView(final int position, final View convertView, final ViewGroup parent) {
+            ImageView imageView = (ImageView) convertView;
+            if (imageView == null) {
+                imageView = new ImageView(mContext);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
+
+            int imageResId;
+            switch (getItem(position) % 5) {
+                case 0:
+                    imageResId = R.drawable.img_nature1;
+                    break;
+                case 1:
+                    imageResId = R.drawable.img_nature2;
+                    break;
+                case 2:
+                    imageResId = R.drawable.img_nature3;
+                    break;
+                case 3:
+                    imageResId = R.drawable.img_nature4;
+                    break;
+                default:
+                    imageResId = R.drawable.img_nature5;
+            }
+
+            Bitmap bitmap = getBitmapFromMemCache(imageResId);
+            if (bitmap == null) {
+                bitmap = BitmapFactory.decodeResource(mContext.getResources(), imageResId);
+                addBitmapToMemoryCache(imageResId, bitmap);
+            }
+            imageView.setImageBitmap(bitmap);
+
+            return imageView;
+        }
+
+        private void addBitmapToMemoryCache(final int key, final Bitmap bitmap) {
+            if (getBitmapFromMemCache(key) == null) {
+                mMemoryCache.put(key, bitmap);
+            }
+        }
+
+        private Bitmap getBitmapFromMemCache(final int key) {
+            return mMemoryCache.get(key);
+        }
+    }
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+	public void onDismiss(final AbsListView listView, final int[] reverseSortedPositions) {
+		for (int position : reverseSortedPositions) {
+			mExpandableListItemAdapter.remove(position);
 		}
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
+	
 	/**
-	 * A placeholder fragment containing a simple view.
+	 * Temporary holder responsible for caching elements of single item
+	 *
 	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			return rootView;
-		}
+	private static class ViewHolder {
+		TextView textView;
+		ToggleButton imageView;
 	}
-
+	
+	public void onToggleClicked(View view){
+		
+	}
 }
