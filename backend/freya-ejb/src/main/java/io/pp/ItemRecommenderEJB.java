@@ -24,7 +24,7 @@ import java.util.List;
 @Singleton(name = "RecommenderEJB")
 public class ItemRecommenderEJB {
 
-    @Resource(lookup = "java:/app/prefs")
+    @Resource(lookup = "java:jboss/datasources/PostgreSQLDS")
     private DataSource dataSource;
 
     Recommender recommender;

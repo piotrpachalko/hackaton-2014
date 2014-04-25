@@ -11,7 +11,8 @@ import javax.inject.Inject;
  */
 public class Rescorer implements IDRescorer {
 
-    @Inject
+	// TODO: integrate properly
+//    @Inject
     private ItemDAO itemDAO;
 
     // Chain of responsiblity to handle rescoring
