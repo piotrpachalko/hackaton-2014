@@ -24,7 +24,7 @@ bin
 gen
 build
 out
-lib
+#lib
 local.properties
 
 target
