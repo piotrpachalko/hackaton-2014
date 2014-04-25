@@ -15,137 +15,161 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.mpmp.freya.mobile.provider.ItemsProvider;
 import com.nhaarman.listviewanimations.itemmanipulation.OnDismissCallback;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
 public class MainActivity extends AbstractActivity implements OnDismissCallback {
 
+	private FreyaExpandableListItemAdapter mExpandableListItemAdapter;
+	private ItemsProvider itemsProvider;
 
-    private FreyaExpandableListItemAdapter mExpandableListItemAdapter;
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		itemsProvider = new ItemsProvider();
+		itemsProvider.startFetchingData();
 
-        mExpandableListItemAdapter = new FreyaExpandableListItemAdapter(this, getItems());
+		mExpandableListItemAdapter = new FreyaExpandableListItemAdapter(this,
+				getItems());
 
-        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(new SwipeDismissAdapter(mExpandableListItemAdapter, this));
+		SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(
+				new SwipeDismissAdapter(mExpandableListItemAdapter, this));
 		swingBottomInAnimationAdapter.setInitialDelayMillis(300);
 		swingBottomInAnimationAdapter.setAbsListView(getListView());
 
 		getListView().setAdapter(swingBottomInAnimationAdapter);
 
-    }
+	}
 
-    private static class FreyaExpandableListItemAdapter extends ExpandableListItemAdapter<Integer> {
+	private static class FreyaExpandableListItemAdapter extends
+			ExpandableListItemAdapter<Integer> {
 
-        private final Context mContext;
-        private final LruCache<Integer, Bitmap> mMemoryCache;
+		private final Context mContext;
+		private final LruCache<Integer, Bitmap> mMemoryCache;
 
-        /**
-         * Creates a new ExpandableListItemAdapter with the specified list, or an empty list if
-         * items == null.
-         */
-        private FreyaExpandableListItemAdapter(final Context context, final List<Integer> items) {
-            super(context, R.layout.activity_expandlistitem_card, R.id.activity_expandlistitem_card_title, R.id.activity_expandlistitem_card_content, items);
-            mContext = context;
+		/**
+		 * Creates a new ExpandableListItemAdapter with the specified list, or
+		 * an empty list if items == null.
+		 */
+		private FreyaExpandableListItemAdapter(final Context context,
+				final List<Integer> items) {
+			super(context, R.layout.activity_expandlistitem_card,
+					R.id.activity_expandlistitem_card_title,
+					R.id.activity_expandlistitem_card_content, items);
+			mContext = context;
 
-            final int cacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
-            mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize) {
-                @Override
-                protected int sizeOf(final Integer key, final Bitmap bitmap) {
-                    // The cache size will be measured in kilobytes rather than
-                    // number of items.
-                    return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
-                }
-            };
-        }
+			final int cacheSize = (int) (Runtime.getRuntime().maxMemory() / 1024);
+			mMemoryCache = new LruCache<Integer, Bitmap>(cacheSize) {
+				@Override
+				protected int sizeOf(final Integer key, final Bitmap bitmap) {
+					// The cache size will be measured in kilobytes rather than
+					// number of items.
+					return bitmap.getRowBytes() * bitmap.getHeight() / 1024;
+				}
+			};
+		}
 
-        @Override
-        public View getTitleView(final int position, final View convertView, final ViewGroup parent) {
-            ViewHolder viewHolder;
+		@Override
+		public View getTitleView(final int position, final View convertView,
+				final ViewGroup parent) {
+			ViewHolder viewHolder;
 			View view = convertView;
 			if (view == null) {
-				view = LayoutInflater.from(mContext).inflate(R.layout.activity_expandlist_label, parent, false);
+				view = LayoutInflater.from(mContext).inflate(
+						R.layout.activity_expandlist_label, parent, false);
 
 				viewHolder = new ViewHolder();
-				viewHolder.textView = (TextView) view.findViewById(R.id.activity_expandlist_label_textview);
+				viewHolder.textView = (TextView) view
+						.findViewById(R.id.activity_expandlist_label_textview);
 				view.setTag(viewHolder);
 
-				viewHolder.imageView = (ToggleButton) view.findViewById(R.id.activity_expandlist_label_togglebutton);
+				viewHolder.imageView = (ToggleButton) view
+						.findViewById(R.id.activity_expandlist_label_togglebutton);
 			} else {
 				viewHolder = (ViewHolder) view.getTag();
 			}
 
-			viewHolder.textView.setText(mContext.getString(R.string.expandorcollapsecard, getItem(position)));
+			viewHolder.textView.setText(mContext.getString(
+					R.string.expandorcollapsecard, getItem(position)));
 
 			return view;
-        }
+		}
 
-        @Override
-        public View getContentView(final int position, final View convertView, final ViewGroup parent) {
-            ImageView imageView = (ImageView) convertView;
-            if (imageView == null) {
-                imageView = new ImageView(mContext);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            }
+		@Override
+		public View getContentView(final int position, final View convertView,
+				final ViewGroup parent) {
+			ImageView imageView = (ImageView) convertView;
+			if (imageView == null) {
+				imageView = new ImageView(mContext);
+				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			}
 
-            int imageResId;
-            switch (getItem(position) % 5) {
-                case 0:
-                    imageResId = R.drawable.img_nature1;
-                    break;
-                case 1:
-                    imageResId = R.drawable.img_nature2;
-                    break;
-                case 2:
-                    imageResId = R.drawable.img_nature3;
-                    break;
-                case 3:
-                    imageResId = R.drawable.img_nature4;
-                    break;
-                default:
-                    imageResId = R.drawable.img_nature5;
-            }
+			int imageResId;
+			switch (getItem(position) % 5) {
+			case 0:
+				imageResId = R.drawable.img_nature1;
+				break;
+			case 1:
+				imageResId = R.drawable.img_nature2;
+				break;
+			case 2:
+				imageResId = R.drawable.img_nature3;
+				break;
+			case 3:
+				imageResId = R.drawable.img_nature4;
+				break;
+			default:
+				imageResId = R.drawable.img_nature5;
+			}
 
-            Bitmap bitmap = getBitmapFromMemCache(imageResId);
-            if (bitmap == null) {
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), imageResId);
-                addBitmapToMemoryCache(imageResId, bitmap);
-            }
-            imageView.setImageBitmap(bitmap);
+			Bitmap bitmap = getBitmapFromMemCache(imageResId);
+			if (bitmap == null) {
+				bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+						imageResId);
+				addBitmapToMemoryCache(imageResId, bitmap);
+			}
+			imageView.setImageBitmap(bitmap);
 
-            return imageView;
-        }
+			return imageView;
+		}
 
-        private void addBitmapToMemoryCache(final int key, final Bitmap bitmap) {
-            if (getBitmapFromMemCache(key) == null) {
-                mMemoryCache.put(key, bitmap);
-            }
-        }
+		private void addBitmapToMemoryCache(final int key, final Bitmap bitmap) {
+			if (getBitmapFromMemCache(key) == null) {
+				mMemoryCache.put(key, bitmap);
+			}
+		}
 
-        private Bitmap getBitmapFromMemCache(final int key) {
-            return mMemoryCache.get(key);
-        }
-    }
+		private Bitmap getBitmapFromMemCache(final int key) {
+			return mMemoryCache.get(key);
+		}
+	}
 
 	@Override
-	public void onDismiss(final AbsListView listView, final int[] reverseSortedPositions) {
+	public void onDismiss(final AbsListView listView,
+			final int[] reverseSortedPositions) {
 		for (int position : reverseSortedPositions) {
 			mExpandableListItemAdapter.remove(position);
 		}
 	}
-	
+
 	/**
 	 * Temporary holder responsible for caching elements of single item
-	 *
+	 * 
 	 */
 	private static class ViewHolder {
 		TextView textView;
 		ToggleButton imageView;
 	}
-	
-	public void onToggleClicked(View view){
-		
+
+	public void onToggleClicked(View view) {
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		itemsProvider.endFetchingData();
+		super.onDestroy();
 	}
 }
