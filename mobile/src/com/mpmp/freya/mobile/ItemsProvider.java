@@ -1,4 +1,4 @@
-package com.mpmp.freya.mobile.provider;
+package com.mpmp.freya.mobile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mpmp.freya.mobile.provider.Item;
 
 import android.util.Log;
 
@@ -37,12 +38,7 @@ public class ItemsProvider {
 		        Reader reader = new InputStreamReader(source);		
 		        
 		        Type listOfTestObject = new TypeToken<List<Item>>(){}.getType();
-		       // String s = gson.toJson(list, listOfTestObject);
 		        List<Item> items = gson.fromJson(reader, listOfTestObject);
-		        
-/*		        SearchResponse response = gson.fromJson(reader, SearchResponse.class);
-		       
-		        List<Item> items = response.getResult();*/
 			}
 		};
 

@@ -3,8 +3,10 @@ package com.mpmp.freya.mobile;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
@@ -15,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.mpmp.freya.mobile.provider.ItemsProvider;
 import com.nhaarman.listviewanimations.itemmanipulation.OnDismissCallback;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.SwingBottomInAnimationAdapter;
 
@@ -171,5 +172,11 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 	protected void onDestroy() {
 		itemsProvider.endFetchingData();
 		super.onDestroy();
+	}
+
+	public void invokeMap(String latitude, String longitude) {
+		String uri = "geo:" + latitude + "," + longitude;
+		startActivity(new Intent(android.content.Intent.ACTION_VIEW,
+				Uri.parse(uri)));
 	}
 }
