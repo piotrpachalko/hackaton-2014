@@ -2,15 +2,10 @@ package com.mpmp.freya.connector.fetcher;
 
 import org.json.simple.JSONObject;
 
+import com.mpmp.freya.connector.commons.QueryParameters;
+import com.mpmp.freya.connector.commons.WebAddress;
+
 
 public interface Fetcher {
-
-    void setAddress(String string);
-
-    void addParam(String key, String value);
-
-    String getFullAddress();
-
-    JSONObject retrieve();
-
+    JSONObject retrieve(WebAddress address, QueryParameters params);
 }

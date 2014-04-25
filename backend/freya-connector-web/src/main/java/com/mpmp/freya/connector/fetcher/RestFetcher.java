@@ -5,58 +5,39 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.mpmp.freya.connector.commons.Parameter;
+import com.mpmp.freya.connector.commons.QueryParameters;
+import com.mpmp.freya.connector.commons.WebAddress;
+
+/**
+ * Rest fetcher class allows to connect to given http address and fetch json
+ * data from it.
+ * 
+ * To use it:
+ * 1. use setAddress method to set http adress of api method you want to call
+ * 2. use addParameter method to fill all parameters for call (e.g. api keys)
+ * 3. use retrieve method to get json you desire
+ *  
+ * @author michal
+ */
 public class RestFetcher implements Fetcher {
 
-    private String address;
-    private Map<String, String> params = new LinkedHashMap<String, String>();
-
     @Override
-    public void setAddress(String address) {
-        this.address = address;
-    }
+    public JSONObject retrieve(WebAddress address, QueryParameters params) {
 
-    @Override
-    public void addParam(String key, String value) {
-        params.put(key, value);
-    }
-
-    @Override
-    public String getFullAddress() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(address);
-        builder.append("?");
-
-        for (Entry<String, String> param : params.entrySet()) {
-            builder.append(param.getKey());
-            builder.append("=");
-            builder.append(param.getValue());
-            builder.append("&");
-        }
-        builder.setLength(builder.length() - 1); // remove last "&" sign TODO
-                                                 // refactor
-
-        return builder.toString();
-    }
-
-    @Override
-    public JSONObject retrieve() {
-
+        
         JSONObject result = new JSONObject();
 
         // TODO extract to class
         InputStream stream = null;
         StringBuilder rawResult = new StringBuilder();
         try {
-            URL url = new URL(getFullAddress());
+            URL url = new URL(getFullAddress(address, params));
             stream = url.openStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             
@@ -88,6 +69,30 @@ public class RestFetcher implements Fetcher {
         }
         
         return result;
+
     }
+
+    private String getFullAddress(WebAddress address, QueryParameters params) {
+        
+        StringBuilder builder = new StringBuilder();
+        builder.append(address.getUrl());
+        builder.append("?");
+
+        if (params != null) {
+            for (Parameter parameter : params.getParams()) {
+                builder.append(parameter.getKey());
+                builder.append("=");
+                builder.append(parameter.getValue());
+                builder.append("&");
+            }
+            // remove last "&" sign
+            // TODO refactor
+            builder.setLength(builder.length() - 1);
+        }
+
+        return builder.toString();
+
+    }
+
 
 }
