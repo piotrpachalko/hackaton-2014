@@ -5,16 +5,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.mpmp.freya.rest.mock.ItemProviderMock;
 import com.mpmp.iface.model.Item;
+import com.mpmp.iface.service.ItemDAO;
 import com.mpmp.iface.service.ItemService;
 
 /**
@@ -26,8 +26,8 @@ import com.mpmp.iface.service.ItemService;
 @Path("/items")
 public class ItemResourceREST implements ItemService {
 
-	@Inject
-	private ItemProviderMock providerMock;
+	@EJB
+	private ItemDAO itemDAO;
 
 	@GET
 	@Path("/")
@@ -36,7 +36,7 @@ public class ItemResourceREST implements ItemService {
 		checkArgument(size > 0, "Provide positive size");
 		checkNotNull(userId, "Provide proper user id in header");
 
-		return providerMock.getItems(size, userId);
+		return itemDAO.findAll();
 	}
 
 }

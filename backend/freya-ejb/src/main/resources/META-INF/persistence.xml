@@ -5,11 +5,12 @@
         http://java.sun.com/xml/ns/persistence
         http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="freya">
-
-		<jta-data-source>java:/jdbc/freyaDS</jta-data-source>
+		<jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
+		<class>com.mpmp.iface.model.Item</class>
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
 			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.show_sql" value="true" />
+<!-- 			<property name="hibernate.hbm2ddl.auto" value="create" /> -->
 		</properties>
 	</persistence-unit>
 </persistence>

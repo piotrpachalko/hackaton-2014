@@ -26,7 +26,7 @@ public class ItemProviderMock {
 		calendar.add(Calendar.HOUR_OF_DAY, i);
 		Date endTime = calendar.getTime();
 		
-		return new Item(i, 
+		return new Item(0, 
 				"Some title " + i, 
 				"Some description " + i, 
 				startTime,

@@ -1,7 +1,16 @@
 package com.mpmp.iface.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -14,20 +23,33 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Pawel Turczyk (pturczyk@gmail.com)
  */
 @XmlRootElement
-public class Item {
+@Entity
+public class Item  implements Serializable {
 
+	private static final long serialVersionUID = -2660534277626284164L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private long id;
+
 	private String title;
+
 	private String descr;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date startTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
+
 	private String location;
+
 	private String url;
 
 	public Item() {
 		// empty constructor for JAXB/JPA
 	}
-	
+
 	public Item(long id, String title, String descr, Date startTime, Date endTime, String location, String url) {
 		super();
 		this.id = id;

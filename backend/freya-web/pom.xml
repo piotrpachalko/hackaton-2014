@@ -19,7 +19,6 @@
 		<dependency>
 			<groupId>com.mpmp</groupId>
 			<artifactId>freya-ejb</artifactId>
-			<version>1.0-SNAPSHOT</version>
 			<type>ejb</type>
 			<scope>provided</scope>
 		</dependency>
@@ -28,6 +27,7 @@
 			<groupId>com.mpmp</groupId>
 			<artifactId>freya-if</artifactId>
 			<version>1.0-SNAPSHOT</version>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>

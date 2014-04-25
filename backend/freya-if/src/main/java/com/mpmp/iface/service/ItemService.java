@@ -19,4 +19,5 @@ public interface ItemService {
 	 * @return retrieved items
 	 */
 	List<Item> getItems(int size, String userId);
+	
 }
