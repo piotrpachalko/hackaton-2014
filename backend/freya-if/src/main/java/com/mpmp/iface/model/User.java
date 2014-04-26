@@ -1,13 +1,12 @@
 package com.mpmp.iface.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -16,15 +15,16 @@ import javax.persistence.Table;
  * @author Pawel Turczyk (pturczyk@gmail.com)
  */
 @Entity
-@Table(name = "UserData")
+@Table(name = "UserProfile")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String userId;
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	private Long id;
 
-	@OneToMany(mappedBy = "user")
-	private List<Preference> preferences = new ArrayList<Preference>();
+	@Column(name = "token")
+	private String userToken;
 
 	private Location location;
 
@@ -32,28 +32,28 @@ public class User implements Serializable {
 		// empty on purpose qrwa
 	}
 
-	public User(String userId, List<Preference> preferences, Location location) {
+	public User(String userId, Location location) {
 		super();
-		this.userId = userId;
-		this.preferences = preferences;
+		this.userToken = userId;
 		this.location = location;
 	}
 
-	public String getUserId() {
-		return userId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public List<Preference> getPreferences() {
-		return preferences;
+	public String getUserToken() {
+		return userToken;
 	}
 
-	public void setPreferences(List<Preference> preferences) {
-		this.preferences = preferences;
+	public void setUserToken(String userToken) {
+		this.userToken = userToken;
 	}
+
 
 	public Location getLocation() {
 		return location;
@@ -64,17 +64,12 @@ public class User implements Serializable {
 	}
 
 	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", preferences=" + preferences + ", location=" + location + "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((preferences == null) ? 0 : preferences.hashCode());
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		result = prime * result + ((userToken == null) ? 0 : userToken.hashCode());
 		return result;
 	}
 
@@ -87,22 +82,28 @@ public class User implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
 		if (location == null) {
 			if (other.location != null)
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
-		if (preferences == null) {
-			if (other.preferences != null)
+		if (userToken == null) {
+			if (other.userToken != null)
 				return false;
-		} else if (!preferences.equals(other.preferences))
-			return false;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
+		} else if (!userToken.equals(other.userToken))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userToken=" + userToken + ", preferences=" /*+ preferences */+ ", location="
+				+ location + "]";
 	}
 
 }

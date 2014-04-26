@@ -6,6 +6,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import com.mpmp.iface.model.User;
 import com.mpmp.iface.service.UserDAO;
@@ -32,8 +33,26 @@ public class UserDAOImpl implements UserDAO {
 		return em.createQuery("SELECT u FROM User u", User.class).getResultList();
 	}
 
+	/**
+	 * {@inheritDoc} Returns null if not found
+	 */
 	@Override
-	public User findById(String id) {
+	public User findById(Long id) {
 		return em.find(User.class, id);
+	}
+
+	@Override
+	public User findByToken(String userToken) {
+		
+		TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userToken = :token", User.class)
+				.setParameter("token", userToken);
+		
+		List<User> results = query.getResultList();
+		if (results.isEmpty() && results.size() != 1) {
+			return null;
+		} else {
+			return results.get(0);
+		}
+
 	}
 }
