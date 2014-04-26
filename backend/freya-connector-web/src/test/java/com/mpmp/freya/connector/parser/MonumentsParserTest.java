@@ -1,4 +1,4 @@
-package com.mpmp.freya.connector.fetcher;
+package com.mpmp.freya.connector.parser;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -21,8 +21,7 @@ import org.mockito.Mockito;
 import com.mpmp.freya.connector.commons.Parameter;
 import com.mpmp.freya.connector.commons.QueryParameters;
 import com.mpmp.freya.connector.commons.WebAddress;
-import com.mpmp.freya.connector.parser.MonumentsParser;
-import com.mpmp.freya.connector.parser.Parser;
+import com.mpmp.freya.connector.fetcher.Fetcher;
 import com.mpmp.iface.model.Item;
 
 public class MonumentsParserTest {
