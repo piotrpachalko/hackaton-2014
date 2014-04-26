@@ -2,21 +2,16 @@ package com.mpmp.freya.connector.postprocessor;
 
 import java.util.Collection;
 
+import javax.ejb.Stateless;
+
 import com.mpmp.iface.model.Item;
 
-public class ImagePostProcessor extends PostProcessor {
-
-    public ImagePostProcessor() {
-        this(null);
-    }
-    
-    public ImagePostProcessor(PostProcessor postProcessor) {
-        super(postProcessor);
-    }
+@Stateless
+public class ImagePostProcessor implements PostProcessor {
 
     @Override
-    protected Collection<Item> process(Collection<Item> items) {
-        // TODO retrieve image for item
+    public Collection<Item> postProcess(Collection<Item> items) {
         return items;
     }
+
 }

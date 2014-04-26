@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import javax.ejb.Stateless;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -25,6 +27,7 @@ import com.mpmp.freya.connector.commons.WebAddress;
  *  
  * @author michal
  */
+@Stateless
 public class RestFetcher implements Fetcher {
 
     @Override

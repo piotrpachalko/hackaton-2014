@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -13,16 +16,19 @@ import com.mpmp.freya.connector.commons.WebAddress;
 import com.mpmp.freya.connector.fetcher.Fetcher;
 import com.mpmp.iface.model.Item;
 
+@Stateless
 public class MonumentsParser implements Parser {
 
-    private WebAddress source;
+    private WebAddress source = new WebAddress("http://otwartezabytki.pl/api/v1/relics.json");
+    
+    @EJB(name="RestFetcher")
     private Fetcher fetcher;
 
     public MonumentsParser(WebAddress source, Fetcher fetcher) {
         this.source = source;
         this.fetcher = fetcher;
     }
-
+    
     @Override
     public Collection<Item> getItems() {
         Collection<Item> items = new LinkedList<Item>();
