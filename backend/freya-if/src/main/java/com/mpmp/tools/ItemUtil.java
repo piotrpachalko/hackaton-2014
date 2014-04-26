@@ -1,12 +1,11 @@
 package com.mpmp.tools;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.mpmp.iface.model.Item;
 
 public class ItemUtil {
@@ -24,12 +23,12 @@ public class ItemUtil {
 	public static Set<Integer> elementsToRemove(List<Item> newItems, Map<Integer, Item> currentItems) {
 
 		final Set<Integer> currentKeys = currentItems.keySet();
-		final List<Integer> newKeys = Lists.transform(newItems, new Function<Item, Integer>() {
-			public Integer apply(Item item) {
-				return (int) item.getId(); // Integer, ask Mario why
-			}
-		});
-
+		final Set<Integer> newKeys = new LinkedHashSet<Integer>();
+		
+		for(Item newItem: newItems) {
+			newKeys.add((int)newItem.getId());
+		}
+		
 		currentKeys.removeAll(newKeys);
 
 		return currentKeys;
