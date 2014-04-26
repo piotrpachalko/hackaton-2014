@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void store(User user) {
-		em.persist(user);
+		em.merge(user);
 	}
 
 	@Override
