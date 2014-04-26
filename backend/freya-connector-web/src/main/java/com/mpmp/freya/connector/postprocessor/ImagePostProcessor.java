@@ -6,6 +6,10 @@ import com.mpmp.iface.model.Item;
 
 public class ImagePostProcessor extends PostProcessor {
 
+    public ImagePostProcessor() {
+        this(null);
+    }
+    
     public ImagePostProcessor(PostProcessor postProcessor) {
         super(postProcessor);
     }

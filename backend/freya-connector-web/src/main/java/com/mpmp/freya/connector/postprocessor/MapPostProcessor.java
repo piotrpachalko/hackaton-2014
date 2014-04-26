@@ -6,6 +6,10 @@ import com.mpmp.iface.model.Item;
 
 public class MapPostProcessor extends PostProcessor {
 
+    public MapPostProcessor() {
+        this(null);
+    }
+    
     public MapPostProcessor(PostProcessor postProcessor) {
         super(postProcessor);
     }
