@@ -6,7 +6,9 @@ import org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray;
 import org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
 import org.apache.mahout.cf.taste.impl.model.jdbc.PostgreSQLJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
+import org.apache.mahout.cf.taste.impl.recommender.GenericRecommendedItem;
 import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.model.Preference;
 import org.apache.mahout.cf.taste.model.PreferenceArray;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
@@ -16,6 +18,9 @@ import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.sql.DataSource;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,15 +40,18 @@ public class ItemRecommenderEJB {
     @Inject
     private RecommenderBuilder builder;
 
+    private DataModel model;
+    private PlusAnonymousUserDataModel modelWithAnonymous;
+
     public ItemRecommenderEJB() {}
 
     @PostConstruct
     void buildRecommender() {
         try {
-            DataModel model = new ReloadFromJDBCDataModel(new PostgreSQLJDBCDataModel(dataSource));
-            PlusAnonymousUserDataModel modelWithAnonymous = new PlusAnonymousUserDataModel(model);
+            model = new ReloadFromJDBCDataModel(new PostgreSQLJDBCDataModel(dataSource));
+            modelWithAnonymous = new PlusAnonymousUserDataModel(model);
             setAnonymousPrefs(modelWithAnonymous);
-            recommender = builder.buildRecommender(modelWithAnonymous);
+            recommender = builder.buildRecommender(model);
         } catch (TasteException e) {
             throw new IllegalArgumentException(e);
         }
@@ -62,6 +70,25 @@ public class ItemRecommenderEJB {
      * @throws org.apache.mahout.cf.taste.common.TasteException in case of problems accessing underlying data model
      */
     public  List<RecommendedItem> getRecsFor(long userId, int howMany) throws TasteException {
-        return recommender.recommend(userId, howMany, rescorer.withUserId(userId));
+        PreferenceArray existingPrefs = model.getPreferencesFromUser(userId);
+        if (existingPrefs.length() == 0) {
+            return recommender.recommend(PlusAnonymousUserDataModel.TEMP_USER_ID, howMany, rescorer.withUserId(userId));
+        } else {
+            List<RecommendedItem> newRecs = recommender.recommend(userId, howMany, rescorer.withUserId(userId));
+            Iterator<Preference> it = existingPrefs.iterator();
+            while (it.hasNext() && newRecs.size() <= howMany ) {
+                Preference p = it.next();
+                newRecs.add(new GenericRecommendedItem(p.getItemID(), p.getValue()));
+            }
+
+            Collections.sort(newRecs, new Comparator<RecommendedItem>() {
+                @Override
+                public int compare(RecommendedItem one, RecommendedItem another) {
+                    return (int)(another.getValue() - one.getValue());
+                }
+            });
+
+            return newRecs;
+        }
     }
 }
