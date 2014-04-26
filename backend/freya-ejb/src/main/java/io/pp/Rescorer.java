@@ -1,18 +1,18 @@
 package io.pp;
 
-import com.mpmp.iface.model.Item;
-import com.mpmp.iface.service.ItemDAO;
+import javax.ejb.EJB;
+
 import org.apache.mahout.cf.taste.recommender.IDRescorer;
 
-import javax.inject.Inject;
+import com.mpmp.iface.model.Item;
+import com.mpmp.iface.service.ItemDAO;
 
 /**
  * @author pp
  */
 public class Rescorer implements IDRescorer {
 
-	// TODO: integrate properly
-//    @Inject
+    @EJB
     private ItemDAO itemDAO;
 
     // Chain of responsiblity to handle rescoring
