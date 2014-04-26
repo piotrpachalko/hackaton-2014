@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * User entity/dto
+ * User entity
  * 
  * @author Pawel Turczyk (pturczyk@gmail.com)
  */

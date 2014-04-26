@@ -20,4 +20,16 @@ public interface ItemService {
 	 */
 	List<Item> getItems(int size, String userId, double latitude, double longitude, long time);
 
+	/**
+	 * Updates item preferences
+	 * 
+	 * @param userToken
+	 *            providing preferences
+	 * @param itemId
+	 *            id of item for which the preference is updated
+	 * @param preference
+	 *            score
+	 */
+	void updatePreferences(String userToken, Long itemId, float preference);
+
 }

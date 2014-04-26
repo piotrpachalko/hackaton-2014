@@ -5,6 +5,11 @@ import java.util.Date;
 
 import javax.persistence.Embeddable;
 
+/**
+ * Class representing user location at a given time
+ * 
+ * @author Pawel Turczyk (pturczyk@gmail.com)
+ */
 @Embeddable
 public class Location implements Serializable {
 	private static final long serialVersionUID = -5870652281622514536L;

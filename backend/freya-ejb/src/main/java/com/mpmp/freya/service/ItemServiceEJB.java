@@ -19,13 +19,18 @@ import com.mpmp.iface.service.ItemDAO;
 import com.mpmp.iface.service.ItemService;
 import com.mpmp.iface.service.UserService;
 
+/**
+ * Item Service implementation
+ * 
+ * @author Pawel Turczyk (pturczyk@gmail.com)
+ */
 @Stateless
 @Remote(ItemService.class)
 public class ItemServiceEJB implements ItemService {
 
 	@EJB
 	private ItemDAO itemDAO;
-	
+
 	@EJB
 	private UserService userServiceEJB;
 
@@ -34,16 +39,16 @@ public class ItemServiceEJB implements ItemService {
 
 	@Override
 	public List<Item> getItems(int size, String userId, double latitude, double longitude, long time) {
+		// update user location, note if user does not exist a new one will be created
 		userServiceEJB.updateLocation(userId, latitude, longitude, new Date(time));
 		User user = userServiceEJB.findUser(userId);
 
-		List<RecommendedItem> recommendations = null;
 		try {
-			recommendations = recommenderEJB.getRecsFor(user.getId(), size);
+			List<RecommendedItem> recommendations = recommenderEJB.getRecsFor(user.getId(), size);
+			return toItems(recommendations);
 		} catch (TasteException e) {
 			throw new RuntimeException(e);
 		}
-		return toItems(recommendations);
 	}
 
 	private List<Item> toItems(List<RecommendedItem> recommendations) {
@@ -51,12 +56,17 @@ public class ItemServiceEJB implements ItemService {
 
 		for (RecommendedItem recommendedItem : recommendations) {
 			Item item = itemDAO.findById(recommendedItem.getItemID());
-			if(item != null) {
+			if (item != null) {
 				items.add(item);
-			} 
+			}
 		}
 
 		return items;
+	}
+
+	@Override
+	public void updatePreferences(String userToken, Long itemId, float preference) {
+		userServiceEJB.updatePreferences(userToken, itemId, preference);
 	}
 
 }

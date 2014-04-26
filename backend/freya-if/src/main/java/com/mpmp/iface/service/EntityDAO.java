@@ -2,6 +2,9 @@ package com.mpmp.iface.service;
 
 import java.util.List;
 
+/**
+ * Generic DAO 
+ */
 public interface EntityDAO<T, K> {
 	/**
 	 * Stores T in storage

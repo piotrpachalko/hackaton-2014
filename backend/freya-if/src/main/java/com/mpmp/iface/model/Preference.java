@@ -7,6 +7,11 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * User item preference
+ * 
+ * @author Pawel Turczyk (pturczyk@gmail.com)
+ */
 @Entity
 @Table(name = "taste_preferences")
 public class Preference implements Serializable {
