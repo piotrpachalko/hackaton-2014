@@ -1,7 +1,9 @@
 package io.pp;
 
 import com.mpmp.iface.model.Item;
+import com.mpmp.iface.model.Location;
 import com.mpmp.iface.service.ItemDAO;
+
 import org.apache.mahout.cf.taste.common.NoSuchUserException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
@@ -19,6 +21,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Date;
@@ -49,6 +52,6 @@ public class RescorerTest {
 
     @Before
     public void foo() throws Exception {
-        when(itemDAO.findById(777L)).thenReturn(new Item(777L, "title", "desc", new Date(), new Date(), "745682375N", "url"));
+        when(itemDAO.findById(777L)).thenReturn(new Item(777L, "title", "desc", new Date(), new Date(), new Location(1,1, new Date()), "url", "picurl", "kind"));
     }
 }

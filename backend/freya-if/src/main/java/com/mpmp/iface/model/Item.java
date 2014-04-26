@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 @Entity
-public class Item  implements Serializable {
+public class Item implements Serializable {
 
 	private static final long serialVersionUID = -2660534277626284164L;
 
@@ -40,15 +40,20 @@ public class Item  implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endTime;
 
-	private String location;
+	private Location location;
 
 	private String url;
+
+	private String pictureUrl;
+
+	private String kind;
 
 	public Item() {
 		// empty constructor for JAXB/JPA
 	}
 
-	public Item(Long id, String title, String descr, Date startTime, Date endTime, String location, String url) {
+	public Item(Long id, String title, String descr, Date startTime, Date endTime, Location location, String url,
+			String pictureUrl, String kind) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -57,13 +62,31 @@ public class Item  implements Serializable {
 		this.endTime = endTime;
 		this.location = location;
 		this.url = url;
+		this.pictureUrl = pictureUrl;
+		this.kind = kind;
 	}
 
-	public long getId() {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((descr == null) ? 0 : descr.hashCode());
+		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((kind == null) ? 0 : kind.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((pictureUrl == null) ? 0 : pictureUrl.hashCode());
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -99,11 +122,11 @@ public class Item  implements Serializable {
 		this.endTime = endTime;
 	}
 
-	public String getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 
@@ -115,24 +138,24 @@ public class Item  implements Serializable {
 		this.url = url;
 	}
 
-	@Override
-	public String toString() {
-		return "Item [id=" + id + ", title=" + title + ", descr=" + descr + ", startTime=" + startTime + ", endTime="
-				+ endTime + ", location=" + location + ", url=" + url + "]";
+	public String getPictureUrl() {
+		return pictureUrl;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((descr == null) ? 0 : descr.hashCode());
-		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
-		return result;
+	public void setPictureUrl(String pictureUrl) {
+		this.pictureUrl = pictureUrl;
+	}
+
+	public String getKind() {
+		return kind;
+	}
+
+	public void setKind(String kind) {
+		this.kind = kind;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
@@ -154,12 +177,25 @@ public class Item  implements Serializable {
 				return false;
 		} else if (!endTime.equals(other.endTime))
 			return false;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (kind == null) {
+			if (other.kind != null)
+				return false;
+		} else if (!kind.equals(other.kind))
 			return false;
 		if (location == null) {
 			if (other.location != null)
 				return false;
 		} else if (!location.equals(other.location))
+			return false;
+		if (pictureUrl == null) {
+			if (other.pictureUrl != null)
+				return false;
+		} else if (!pictureUrl.equals(other.pictureUrl))
 			return false;
 		if (startTime == null) {
 			if (other.startTime != null)
@@ -177,6 +213,13 @@ public class Item  implements Serializable {
 		} else if (!url.equals(other.url))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Item [id=" + id + ", title=" + title + ", descr=" + descr + ", startTime=" + startTime + ", endTime="
+				+ endTime + ", location=" + location + ", url=" + url + ", pictureUrl=" + pictureUrl + ", kind=" + kind
+				+ "]";
 	}
 
 }

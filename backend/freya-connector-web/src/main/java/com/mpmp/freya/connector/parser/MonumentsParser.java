@@ -15,6 +15,7 @@ import com.mpmp.freya.connector.commons.QueryParameters;
 import com.mpmp.freya.connector.commons.WebAddress;
 import com.mpmp.freya.connector.fetcher.Fetcher;
 import com.mpmp.iface.model.Item;
+import com.mpmp.iface.model.Location;
 
 @Stateless
 public class MonumentsParser implements Parser {
@@ -72,7 +73,7 @@ public class MonumentsParser implements Parser {
                 item.setStartTime(new Date(0L));
                 item.setEndTime(new Date(0L));
                 item.setUrl(url.toString());
-                item.setLocation(location.toString());
+                item.setLocation(new Location((Double) relic.get("latitude"), (Double) relic.get("longitude"), new Date()));
                 items.add(item);
             }
             place = new Parameter("place", "szczecin");

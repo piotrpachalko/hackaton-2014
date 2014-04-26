@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.mpmp.iface.model.Item;
 import com.mpmp.iface.model.Location;
-import com.mpmp.iface.model.Preference;
 import com.mpmp.iface.model.User;
 
 public class ProviderMock {
@@ -41,7 +40,9 @@ public class ProviderMock {
 				"Some description " + i, 
 				startTime,
 				endTime,
-				"Location " + userId,
-				"http://some.url.com/" + i);
+				new Location(i * 5, i * 5, new Date()),
+				"http://some.url.com/" + i,
+				"http://picture.url.com/img-" + i,
+				"kind " + i);
 	}
 }

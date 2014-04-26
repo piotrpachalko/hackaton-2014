@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Class representing user location at a given time
@@ -11,6 +12,7 @@ import javax.persistence.Embeddable;
  * @author Pawel Turczyk (pturczyk@gmail.com)
  */
 @Embeddable
+@XmlRootElement
 public class Location implements Serializable {
 	private static final long serialVersionUID = -5870652281622514536L;
 
