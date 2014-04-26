@@ -22,12 +22,12 @@ public class MonumentsParser implements Parser {
     private WebAddress source = new WebAddress("http://otwartezabytki.pl/api/v1/relics.json");
     
     @EJB(name="RestFetcher")
-    private Fetcher fetcher;
+    private Fetcher<JSONObject> fetcher;
     
     public MonumentsParser() {
     }
 
-    public MonumentsParser(WebAddress source, Fetcher fetcher) {
+    public MonumentsParser(WebAddress source, Fetcher<JSONObject> fetcher) {
         this.source = source;
         this.fetcher = fetcher;
     }

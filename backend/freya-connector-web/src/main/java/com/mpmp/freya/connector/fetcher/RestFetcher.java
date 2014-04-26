@@ -28,7 +28,7 @@ import com.mpmp.freya.connector.commons.WebAddress;
  * @author michal
  */
 @Stateless
-public class RestFetcher implements Fetcher {
+public class RestFetcher implements Fetcher<JSONObject> {
 
     @Override
     public JSONObject retrieve(WebAddress address, QueryParameters params) {

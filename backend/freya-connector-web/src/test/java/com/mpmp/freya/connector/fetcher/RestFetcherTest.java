@@ -24,7 +24,7 @@ public class RestFetcherTest {
         // given
         setupServerWithResponse(JSON_ARRAY);
         
-        Fetcher fetcher = new RestFetcher();
+        Fetcher<JSONObject> fetcher = new RestFetcher();
         
         // when
         WebAddress address = new WebAddress(server.getUrl("/PATH").toString());
@@ -59,7 +59,7 @@ public class RestFetcherTest {
         // given
         setupServerWithResponse(JSON_OBJECT);
 
-        Fetcher fetcher = new RestFetcher();
+        Fetcher<JSONObject> fetcher = new RestFetcher();
         
         // when
         WebAddress address = new WebAddress(server.getUrl("/PATH").toString());
