@@ -30,7 +30,7 @@ public class Item  implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	private long id;
+	private Long id;
 
 	private String title;
 
@@ -50,7 +50,7 @@ public class Item  implements Serializable {
 		// empty constructor for JAXB/JPA
 	}
 
-	public Item(long id, String title, String descr, Date startTime, Date endTime, String location, String url) {
+	public Item(Long id, String title, String descr, Date startTime, Date endTime, String location, String url) {
 		super();
 		this.id = id;
 		this.title = title;
