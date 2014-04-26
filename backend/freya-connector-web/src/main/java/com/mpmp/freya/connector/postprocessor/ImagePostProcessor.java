@@ -4,15 +4,15 @@ import java.util.Collection;
 
 import com.mpmp.iface.model.Item;
 
-public class MapPostProcessor extends PostProcessor {
+public class ImagePostProcessor extends PostProcessor {
 
-    public MapPostProcessor(PostProcessor postProcessor) {
+    public ImagePostProcessor(PostProcessor postProcessor) {
         super(postProcessor);
     }
 
     @Override
     protected Collection<Item> process(Collection<Item> items) {
-        // TODO add implementation that uses google maps api
+        // TODO retrieve image for item
         return items;
     }
 }
