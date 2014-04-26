@@ -3,7 +3,7 @@
  */
 package com.mpmp.freya.mobile;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -19,6 +19,7 @@ import android.widget.ListView;
 public abstract class AbstractActivity extends ActionBarActivity {
 
 	private ListView mListView;
+	private List<Integer> items;
 
 	public ListView getListView() {
 		return mListView;
@@ -49,13 +50,18 @@ public abstract class AbstractActivity extends ActionBarActivity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
 
-	public ArrayList<Integer> getItems() {
-		ArrayList<Integer> items = new ArrayList<Integer>();
+	public List<Integer> getItems() {
+		/*ArrayList<Integer> items = new ArrayList<Integer>();
 		for (int i = 0; i < 1000; i++) {
 			items.add(i);
-		}
+		}*/
 		return items;
+	}
+
+	public void setItems(List<Integer> items) {
+		this.items = items;
 	}
 
 }
