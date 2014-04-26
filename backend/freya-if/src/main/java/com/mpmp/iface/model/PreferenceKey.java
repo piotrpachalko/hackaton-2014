@@ -9,10 +9,10 @@ import javax.persistence.Embeddable;
 public class PreferenceKey implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "item_Id", nullable = false)
+	@Column(name = "item_id", nullable = false)
 	private long itemId;
 
-	@Column(name = "userId", nullable = false)
+	@Column(name = "user_id", nullable = false)
 	private long userId;
 
 	public PreferenceKey() {
