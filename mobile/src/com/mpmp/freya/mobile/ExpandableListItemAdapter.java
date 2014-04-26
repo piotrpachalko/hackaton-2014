@@ -156,11 +156,6 @@ public abstract class ExpandableListItemAdapter<T> extends ArrayAdapter<T> imple
             viewHolder.titleParent.removeAllViews();
             viewHolder.titleParent.addView(titleView);
 
-           /* if (mActionViewResId == 0) {
-                view.setOnClickListener(new TitleViewOnClickListener(viewHolder.contentParent));
-            } else {
-                view.findViewById(mActionViewResId).setOnClickListener(new TitleViewOnClickListener(viewHolder.contentParent));
-            }*/
             MyGestureDetector gestureListener = new MyGestureDetector(viewHolder.contentParent);
 			gestureDetector = new GestureDetector(mContext, gestureListener);
             gestureDetector.setOnDoubleTapListener(gestureListener);

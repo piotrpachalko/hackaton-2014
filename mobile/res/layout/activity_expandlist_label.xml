@@ -21,5 +21,15 @@
         style="@style/toggleButton"
         android:background="@drawable/ic_toggle_bg"
          />
+     
+    <!--  <ToggleButton
+        android:id="@+id/activity_expandlist_label_togglebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:onClick="onToggleClicked"
+        style="@style/toggleButton"
+        android:background="@drawable/ic_toggle_bg"
+         /> -->
 
 </LinearLayout>

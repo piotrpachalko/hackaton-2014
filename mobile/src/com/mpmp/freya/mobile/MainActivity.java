@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -37,6 +36,8 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 		super.onCreate(savedInstanceState);
 		
 		initLocationManager();
+		
+		//invokeMap(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));
 
 		itemsProvider = new ItemsProvider(this);
 		itemsProvider.startFetchingData();
@@ -53,7 +54,7 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 
 	}
 
-	private static class FreyaExpandableListItemAdapter extends
+	public class FreyaExpandableListItemAdapter extends
 			ExpandableListItemAdapter<Integer> {
 
 		private final Context mContext;
@@ -63,7 +64,7 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 		 * Creates a new ExpandableListItemAdapter with the specified list, or
 		 * an empty list if items == null.
 		 */
-		private FreyaExpandableListItemAdapter(final Context context,
+		public FreyaExpandableListItemAdapter(final Context context,
 				final List<Integer> items) {
 			super(context, R.layout.activity_expandlistitem_card,
 					R.id.activity_expandlistitem_card_title,
@@ -116,31 +117,15 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 			}
 
-			int imageResId;
-			switch (getItem(position) % 5) {
-			case 0:
-				imageResId = R.drawable.img_nature1;
-				break;
-			case 1:
-				imageResId = R.drawable.img_nature2;
-				break;
-			case 2:
-				imageResId = R.drawable.img_nature3;
-				break;
-			case 3:
-				imageResId = R.drawable.img_nature4;
-				break;
-			default:
-				imageResId = R.drawable.img_nature5;
-			}
-
-			Bitmap bitmap = getBitmapFromMemCache(imageResId);
-			if (bitmap == null) {
-				bitmap = BitmapFactory.decodeResource(mContext.getResources(),
-						imageResId);
-				addBitmapToMemoryCache(imageResId, bitmap);
-			}
-			imageView.setImageBitmap(bitmap);
+			//Bitmap bitmap = getBitmapFromMemCache(imageResId);
+			//if (bitmap == null) {
+				LoadURLImage loader = new LoadURLImage(imageView);
+				loader.execute("https://lh4.googleusercontent.com/-DxoDxrCLj-A/AAAAAAAAAAI/AAAAAAAAAAA/4DUU1vmZ5xk/photo.jpg");
+				/*bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+						imageResId);*/
+				//addBitmapToMemoryCache(imageResId, bitmap);
+			//}
+			//imageView.setImageBitmap(bitmap);
 
 			return imageView;
 		}
@@ -154,6 +139,7 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 		private Bitmap getBitmapFromMemCache(final int key) {
 			return mMemoryCache.get(key);
 		}
+
 	}
 
 	@Override
