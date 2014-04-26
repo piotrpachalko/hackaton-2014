@@ -14,6 +14,9 @@ public class MonumentsDuplicateFinder implements DuplicateFilter {
     @EJB
     private ItemDAO dao;
 
+    public MonumentsDuplicateFinder() {
+    }
+    
     public MonumentsDuplicateFinder(ItemDAO dao) {
         this.dao = dao;
     }

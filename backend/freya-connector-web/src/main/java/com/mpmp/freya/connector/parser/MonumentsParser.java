@@ -23,6 +23,9 @@ public class MonumentsParser implements Parser {
     
     @EJB(name="RestFetcher")
     private Fetcher fetcher;
+    
+    public MonumentsParser() {
+    }
 
     public MonumentsParser(WebAddress source, Fetcher fetcher) {
         this.source = source;
