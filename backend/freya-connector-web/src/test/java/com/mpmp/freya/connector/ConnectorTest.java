@@ -57,10 +57,9 @@ public class ConnectorTest {
         Parser parser = new MonumentsParser(listAddress, mockRestFetcher);
         PostProcessor postProcessor = new MapPostProcessor();
         ItemDAO dao = Mockito.mock(ItemDAO.class);
-        
         DuplicateFilter duplicateFinder = new MonumentsDuplicateFinder(dao);
         
-        Connector connector = new Connector(parser, duplicateFinder, postProcessor, dao);
+        Connector connector = new Connector(parser, duplicateFinder, dao, postProcessor);
         
         // when
         connector.retrieveItems();
@@ -79,13 +78,11 @@ public class ConnectorTest {
         Fetcher fetcher = new RestFetcher();
 
         Parser parser = new MonumentsParser(listAddress, fetcher);
-        
-        PostProcessor postProcessor = new MapPostProcessor();
         ItemDAO dao = Mockito.mock(ItemDAO.class);
-        
+        PostProcessor postProcessor = new MapPostProcessor();
         DuplicateFilter duplicateFinder = new MonumentsDuplicateFinder(dao);
         
-        Connector connector = new Connector(parser, duplicateFinder, postProcessor, dao);
+        Connector connector = new Connector(parser, duplicateFinder, dao, postProcessor);
         
         // when
         connector.retrieveItems();

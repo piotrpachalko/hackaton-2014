@@ -2,21 +2,15 @@ package com.mpmp.freya.connector.postprocessor;
 
 import java.util.Collection;
 
+import javax.ejb.Stateless;
+
 import com.mpmp.iface.model.Item;
 
-public class MapPostProcessor extends PostProcessor {
-
-    public MapPostProcessor() {
-        this(null);
-    }
-    
-    public MapPostProcessor(PostProcessor postProcessor) {
-        super(postProcessor);
-    }
+@Stateless
+public class MapPostProcessor implements PostProcessor {
 
     @Override
-    protected Collection<Item> process(Collection<Item> items) {
-        // TODO add implementation that uses google maps api
+    public Collection<Item> postProcess(Collection<Item> items) {
         return items;
     }
 }
