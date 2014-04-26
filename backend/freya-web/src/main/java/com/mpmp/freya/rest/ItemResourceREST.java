@@ -23,7 +23,7 @@ import com.mpmp.iface.service.ItemService;
  */
 @Stateless
 @Path("/items")
-public class ItemResourceREST implements ItemService {
+public class ItemResourceREST  {
 
 	@EJB(beanName="ItemServiceEJB")
 	private ItemService itemServiceEJB;
