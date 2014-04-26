@@ -1,5 +1,7 @@
 package com.mpmp.freya.rest;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import com.mpmp.freya.rest.mock.ProviderMock;
 import com.mpmp.iface.model.Item;
 import com.mpmp.iface.model.Preference;
+import com.mpmp.iface.model.PreferenceKey;
 import com.mpmp.iface.model.User;
 import com.mpmp.iface.service.ItemDAO;
 import com.mpmp.iface.service.PreferenceDAO;
@@ -50,15 +53,13 @@ public class ItemResourceMockREST {
 
 	@GET
 	@Path("preference")
-	public Long addPrefrence(@QueryParam(value = "itemId") Long itemId, @QueryParam(value = "uid") String userId,
+	public void addPrefrence(@QueryParam(value = "itemId") Long itemId, @QueryParam(value = "uid") String userToken,
 			@QueryParam(value = "score") float score) {
 		
-		Item item = itemDAO.findById(itemId);
-		User user = userDAO.findById(userId);
-
-		Preference pref = new Preference(item, user, score);
-		prefrenceDAO.store(pref);
+		User user = userDAO.findByToken(userToken);
+		checkNotNull(user, "invalid user id");
 		
-		return pref.getId();
+		Preference pref = new Preference(new PreferenceKey(itemId, user.getId()), score);
+		prefrenceDAO.store(pref);
 	}
 }

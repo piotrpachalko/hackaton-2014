@@ -96,5 +96,7 @@
       </plugins>
    </build>
 
+<profiles>
+</profiles>
 
 </project>

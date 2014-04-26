@@ -25,7 +25,7 @@ public class ProviderMock {
 	
 	public User createUser(String userId) {
 		Location location = new Location(55.6, 75.5, new Date());
-		User user = new User(userId, new ArrayList<Preference>(), location);
+		User user = new User(userId, location);
 		return user;
 	}
 	

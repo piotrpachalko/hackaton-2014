@@ -3,7 +3,6 @@ package com.mpmp.freya.rest;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -14,11 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.mpmp.freya.service.UserServiceEJB;
 import com.mpmp.iface.model.Item;
-import com.mpmp.iface.service.ItemDAO;
 import com.mpmp.iface.service.ItemService;
-import com.mpmp.iface.service.UserService;
 
 /**
  * Item service REST implementation
@@ -29,25 +25,20 @@ import com.mpmp.iface.service.UserService;
 @Path("/items")
 public class ItemResourceREST implements ItemService {
 
-	@EJB
-	private ItemDAO itemDAO;
-
-	@EJB
-	private UserService userServiceEJB;
+	@EJB(beanName="ItemServiceEJB")
+	private ItemService itemServiceEJB;
 
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Item> getItems(@QueryParam(value = "n") int size, @QueryParam(value = "uid") String userId,
+	public List<Item> getItems(@QueryParam(value = "n") int size, @QueryParam(value = "uid") String userToken,
 			@QueryParam(value = "latitude") double latitude, @QueryParam(value = "longitude") double longitude,
 			@QueryParam(value = "time") long time) {
 		
 		checkArgument(size > 0, "Provide positive size");
-		checkNotNull(userId, "Provide proper user id in header");
-
-		userServiceEJB.updateLocation(userId, latitude, longitude, new Date(time));
+		checkNotNull(userToken, "Provide proper user id in header");
 		
-		return itemDAO.findAll();
+		return itemServiceEJB.getItems(size, userToken, latitude, longitude, time);
 	}
 
 }
