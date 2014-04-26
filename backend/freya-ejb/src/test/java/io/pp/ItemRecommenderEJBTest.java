@@ -1,5 +1,6 @@
 package io.pp;
 
+import org.apache.mahout.cf.taste.common.NoSuchUserException;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.eval.RecommenderEvaluator;
@@ -54,13 +55,13 @@ public class ItemRecommenderEJBTest {
     @Test
     public void testGetRecsForRealUser() throws Exception {
         assertThat(ir.getRecsFor(4, 10))
-            .hasSize(1)
+            .hasSize(3)
             .extracting("itemID")
-                .contains(102L)
+                .contains(102L, 103L, 101L)
         ;
     }
 
-    @Test
+    @Test(expected = NoSuchUserException.class)
     public void testGetRecsForAnonymousUser() throws Exception {
         assertThat(ir.getRecsFor(PlusAnonymousUserDataModel.TEMP_USER_ID, 10))
                 .hasSize(1)
