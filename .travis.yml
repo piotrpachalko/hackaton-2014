@@ -2,12 +2,12 @@ language: java
 script: mvn package -Popenshift
 jdk:
 - openjdk7
-deploy:
-  provider: openshift
-  user: michal.przybylak@gmail.com
-  password:
-    secure: TE/NrJUw1I66f1x/E1p650QVH5g6mV4K0msAq0oGWVLIwPUyKBaXeckGkKfMc+wWLhKN+bwZm0L2hcXDDwEvCi1g0XJOn2YPPwm3IpxA89kYLtwllfYEnAOcMej8ScnLOXVKhP2dzUxbjNZr2bUbVAANlwy1AChx53I463rWv58=
-  app: nethack
-  domain: mprzybylak
-  on:
-    repo: piotrpachalko/hackaton-2014
+#deploy:
+#  provider: openshift
+#  user: michal.przybylak@gmail.com
+#  password:
+#    secure: TE/NrJUw1I66f1x/E1p650QVH5g6mV4K0msAq0oGWVLIwPUyKBaXeckGkKfMc+wWLhKN+bwZm0L2hcXDDwEvCi1g0XJOn2YPPwm3IpxA89kYLtwllfYEnAOcMej8ScnLOXVKhP2dzUxbjNZr2bUbVAANlwy1AChx53I463rWv58=
+#  app: nethack
+#  domain: mprzybylak
+#  on:
+#    repo: piotrpachalko/hackaton-2014
