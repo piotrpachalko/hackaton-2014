@@ -17,33 +17,61 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mpmp.freya.mobile.provider.Item;
-
-import android.util.Log;
 
 public class ItemsProvider {
 
 	private final ScheduledExecutorService scheduler = Executors
 			.newScheduledThreadPool(1);
 
-	private final String URL = "http://82.145.64.188:8080/freya-web/items?n=20&uid=test";
+	private final String URL = "http://82.145.64.188:8080/freya-web/items?n=20&uid=test&latitude=%d&longitude=%d&time=%d";
+	private final Runnable worker;
+	private ScheduledFuture<?> future;
+	private List<Item> items;
+	private MainActivity mainActivity;
 
-	public void startFetchingData() {
-		final Runnable beeper = new Runnable() {
+	public ItemsProvider(MainActivity mainActivity) {
+		this.mainActivity = mainActivity;
+
+		final int latitude = (int) mainActivity.getLocation().getLatitude();
+		final int longitude = (int) mainActivity.getLocation().getLongitude();
+		final long time = mainActivity.getLocation().getTime();
+
+		worker = new Runnable() {
 			public void run() {
-				InputStream source = retrieveStream(URL);		        
-		        Gson gson = new Gson();		        
-		        Reader reader = new InputStreamReader(source);		
-		        
-		        Type listOfTestObject = new TypeToken<List<Item>>(){}.getType();
-		        List<Item> items = gson.fromJson(reader, listOfTestObject);
+				InputStream source = retrieveStream(String.format(URL,
+						latitude, longitude, time));
+				Gson gson = new Gson();
+				Reader reader = new InputStreamReader(source);
+
+				Type listOfTestObject = new TypeToken<List<Item>>() {
+				}.getType();
+				items = gson.fromJson(reader, listOfTestObject);
 			}
 		};
+	}
 
-		final ScheduledFuture beeperHandle = scheduler.scheduleAtFixedRate(
-				beeper, 1, 30, TimeUnit.SECONDS);
+	public void startFetchingData() {
+		future = scheduleFetchingData();
+	}
+
+	private ScheduledFuture<?> scheduleFetchingData() {
+		return scheduler.isShutdown() ? null : scheduler.scheduleAtFixedRate(
+				worker, 1, 30, TimeUnit.SECONDS);
+	}
+
+	public void resumeFetchingData() {
+		if (future != null && future.isCancelled() && !future.isDone()) {
+			startFetchingData();
+		}
+	}
+
+	public void cancelFetchingData() {
+		future.cancel(true);
 	}
 
 	public void endFetchingData() {

@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
@@ -24,12 +27,18 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 
 	private FreyaExpandableListItemAdapter mExpandableListItemAdapter;
 	private ItemsProvider itemsProvider;
+	private LocationManager locationManager;
+	private String provider;
+	private FreyaLocationListener locationListener;
+	private Location location;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		initLocationManager();
 
-		itemsProvider = new ItemsProvider();
+		itemsProvider = new ItemsProvider(this);
 		itemsProvider.startFetchingData();
 
 		mExpandableListItemAdapter = new FreyaExpandableListItemAdapter(this,
@@ -178,5 +187,41 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 		String uri = "geo:" + latitude + "," + longitude;
 		startActivity(new Intent(android.content.Intent.ACTION_VIEW,
 				Uri.parse(uri)));
+	}
+
+	private void initLocationManager() {
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new FreyaLocationListener(this);
+
+		Criteria criteria = new Criteria();
+		provider = locationManager.getBestProvider(criteria, false);
+		Location location = locationManager.getLastKnownLocation(provider);
+
+		if (location != null) {
+			this.setLocation(location);
+			locationListener.onLocationChanged(location);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		locationManager.requestLocationUpdates(provider, 400, 1,
+				locationListener);
+		itemsProvider.resumeFetchingData();
+	}
+	
+	@Override
+	protected void onPause() {
+		itemsProvider.cancelFetchingData();
+		super.onPause();
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+	
+	public Location getLocation() {
+		return location;
 	}
 }
