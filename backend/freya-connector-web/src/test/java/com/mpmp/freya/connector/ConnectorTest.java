@@ -17,6 +17,8 @@ import org.mockito.Mockito;
 import com.mpmp.freya.connector.commons.Parameter;
 import com.mpmp.freya.connector.commons.QueryParameters;
 import com.mpmp.freya.connector.commons.WebAddress;
+import com.mpmp.freya.connector.duplicatefilter.DuplicateFilter;
+import com.mpmp.freya.connector.duplicatefilter.MonumentsDuplicateFinder;
 import com.mpmp.freya.connector.fetcher.Fetcher;
 import com.mpmp.freya.connector.fetcher.RestFetcher;
 import com.mpmp.freya.connector.parser.MonumentsParser;
@@ -56,7 +58,9 @@ public class ConnectorTest {
         PostProcessor postProcessor = new MapPostProcessor();
         ItemDAO dao = Mockito.mock(ItemDAO.class);
         
-        Connector connector = new Connector(parser, postProcessor, dao);
+        DuplicateFilter duplicateFinder = new MonumentsDuplicateFinder(dao);
+        
+        Connector connector = new Connector(parser, duplicateFinder, postProcessor, dao);
         
         // when
         connector.retrieveItems();
@@ -79,7 +83,9 @@ public class ConnectorTest {
         PostProcessor postProcessor = new MapPostProcessor();
         ItemDAO dao = Mockito.mock(ItemDAO.class);
         
-        Connector connector = new Connector(parser, postProcessor, dao);
+        DuplicateFilter duplicateFinder = new MonumentsDuplicateFinder(dao);
+        
+        Connector connector = new Connector(parser, duplicateFinder, postProcessor, dao);
         
         // when
         connector.retrieveItems();
