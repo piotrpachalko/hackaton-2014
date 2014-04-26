@@ -18,6 +18,6 @@ public interface ItemService {
 	 *            id of user
 	 * @return retrieved items
 	 */
-	List<Item> getItems(int size, String userId);
-	
+	List<Item> getItems(int size, String userId, double latitude, double longitude, long time);
+
 }

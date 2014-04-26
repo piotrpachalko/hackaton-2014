@@ -7,10 +7,12 @@
 	<persistence-unit name="freya">
 		<jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
 		<class>com.mpmp.iface.model.Item</class>
+		<class>com.mpmp.iface.model.Preference</class>
+		<class>com.mpmp.iface.model.User</class>
 		<properties>
 			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.show_sql" value="true" />
-<!-- 			<property name="hibernate.hbm2ddl.auto" value="create" /> -->
+			<property name="hibernate.hbm2ddl.auto" value="create" />
 		</properties>
 	</persistence-unit>
 </persistence>

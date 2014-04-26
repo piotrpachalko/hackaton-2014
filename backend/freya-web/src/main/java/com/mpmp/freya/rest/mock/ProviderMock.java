@@ -6,8 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.mpmp.iface.model.Item;
+import com.mpmp.iface.model.Location;
+import com.mpmp.iface.model.Preference;
+import com.mpmp.iface.model.User;
 
-public class ItemProviderMock {
+public class ProviderMock {
 	public List<Item> getItems(int size, String userId) {
 		List<Item> items = new ArrayList<Item>();
 		
@@ -19,6 +22,13 @@ public class ItemProviderMock {
 		return items;
 	}
 
+	
+	public User createUser(String userId) {
+		Location location = new Location(55.6, 75.5, new Date());
+		User user = new User(userId, new ArrayList<Preference>(), location);
+		return user;
+	}
+	
 	private Item createItem(int i, String userId) {
 		Date startTime =  new Date();
 		
@@ -26,7 +36,7 @@ public class ItemProviderMock {
 		calendar.add(Calendar.HOUR_OF_DAY, i);
 		Date endTime = calendar.getTime();
 		
-		return new Item(0, 
+		return new Item(null, 
 				"Some title " + i, 
 				"Some description " + i, 
 				startTime,
