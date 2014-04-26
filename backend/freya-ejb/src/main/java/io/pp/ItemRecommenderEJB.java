@@ -18,6 +18,8 @@ import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.sql.DataSource;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -74,7 +76,7 @@ public class ItemRecommenderEJB {
         if (existingPrefs.length() == 0) {
             return recommender.recommend(PlusAnonymousUserDataModel.TEMP_USER_ID, howMany, rescorer.withUserId(userId));
         } else {
-            List<RecommendedItem> newRecs = recommender.recommend(userId, howMany, rescorer.withUserId(userId));
+            List<RecommendedItem> newRecs = new ArrayList<RecommendedItem>(recommender.recommend(userId, howMany, rescorer.withUserId(userId)));
             Iterator<Preference> it = existingPrefs.iterator();
             while (it.hasNext() && newRecs.size() <= howMany ) {
                 Preference p = it.next();
