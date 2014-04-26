@@ -1,6 +1,7 @@
 package com.mpmp.freya.mobile;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -571,5 +572,10 @@ public abstract class ExpandableListItemAdapter<T> extends ArrayAdapter<T> imple
             });
             return animator;
         }
+    }
+    
+    public void updateMItems(Collection<? extends T> collection) {
+		mItems.addAll(collection);
+		notifyDataSetChanged();
     }
 }

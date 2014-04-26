@@ -210,4 +210,11 @@ public class MainActivity extends AbstractActivity implements OnDismissCallback 
 	public Location getLocation() {
 		return location;
 	}
+	
+	@Override
+	public void setItems(List<Integer> items) {
+		// TODO Auto-generated method stub
+		super.setItems(items);
+		mExpandableListItemAdapter.updateMItems(items);
+	}
 }

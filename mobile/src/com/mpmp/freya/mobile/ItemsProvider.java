@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,14 +23,13 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mpmp.freya.mobile.provider.Item;
-import com.mpmp.freya.mobile.provider.ItemUtil;
 
 public class ItemsProvider {
 
 	private final ScheduledExecutorService scheduler = Executors
 			.newScheduledThreadPool(1);
 
-	private final String URL = "http://82.145.64.188:8080/freya-web/items?n=20&uid=Robert&latitude=%d&longitude=%d&time=%d";
+	private final String URL = "http://nethack-mprzybylak.rhcloud.com/freya-web/items?n=100&uid=Piotrek&latitude=%d&longitude=%d&time=%d";
 	private final Runnable worker;
 	private ScheduledFuture<?> future;
 	private List<Item> items;
@@ -52,7 +52,11 @@ public class ItemsProvider {
 				Type listOfTestObject = new TypeToken<List<Item>>() {
 				}.getType();
 				items = gson.fromJson(reader, listOfTestObject);
-				mainActivity.setItems(ItemUtil.mapElementsToAdd(items));
+				ArrayList<Integer> items2 = new ArrayList<Integer>();
+				for (Item itemEl : items) {
+					items2.add((int) itemEl.getId());
+				}
+				mainActivity.setItems(items2);
 			}
 		};
 	}
@@ -64,6 +68,7 @@ public class ItemsProvider {
 	private ScheduledFuture<?> scheduleFetchingData() {
 		return scheduler.isShutdown() ? null : scheduler.scheduleAtFixedRate(
 				worker, 1, 30, TimeUnit.SECONDS);
+
 	}
 
 	public void resumeFetchingData() {

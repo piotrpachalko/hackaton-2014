@@ -61,7 +61,9 @@ public abstract class AbstractActivity extends ActionBarActivity {
 	}
 
 	public void setItems(List<Integer> items) {
-		this.items = items;
+		this.items = items;		
 	}
+	
+	
 
 }
