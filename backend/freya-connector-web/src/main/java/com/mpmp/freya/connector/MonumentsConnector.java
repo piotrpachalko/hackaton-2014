@@ -27,7 +27,7 @@ public class MonumentsConnector {
     @EJB(beanName = "MapPostProcessor")
     private PostProcessor mapPostProcessor;
     
-    @EJB
+    @EJB(lookup = "java:global/freya/freya-ejb-1.0-SNAPSHOT/ItemDAOImpl!com.mpmp.iface.service.ItemDAO")
     private ItemDAO dao;
 
     @GET
